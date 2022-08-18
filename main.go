@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"go-sql/repositories"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -33,4 +34,11 @@ func main() {
 	}
 	defer db.Close()
 
+	ItemRepository := repositories.NewItemRepository(db)
+
+	items := ItemRepository.FetchAllItems()
+	log.Printf("items: %+v", items)
+
+	item := ItemRepository.FetchById(1)
+	log.Printf("item: %+v", item)
 }
