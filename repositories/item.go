@@ -20,12 +20,6 @@ func (itemRepo ItemRepository) FetchAllItems() []Item {
 	log.Println("=== FETCHING ALL ITEMS ===")
 
 	items := []Item{}
-	var (
-		id     int
-		name   string
-		qty    int
-		weight float32
-	)
 
 	rows, err := itemRepo.db.Query("SELECT id, name, qty, weight FROM items")
 	if err != nil {
@@ -42,7 +36,7 @@ func (itemRepo ItemRepository) FetchAllItems() []Item {
 			log.Fatal(err)
 		}
 
-		log.Printf("id=%d, name=%s, qty=%d, weight=%f\n", id, name, qty, weight)
+		log.Printf("id=%d, name=%s, qty=%d, weight=%f\n", item.ID, item.Name, item.Qty, item.Weight)
 		items = append(items, item)
 	}
 
@@ -68,4 +62,37 @@ func (itemRepo ItemRepository) FetchById(itemId int) Item {
 	log.Printf("id=%d, name=%s, qty=%d, weight=%f\n", item.ID, item.Name, item.Qty, item.Weight)
 
 	return item
+}
+
+func (itemRepo ItemRepository) CreateItem(item Item) {
+	log.Println("=== CREATE NEW ITEM ===")
+
+	_, err := itemRepo.db.Exec(`
+		INSERT INTO items(name, qty, weight) 
+		VALUES
+			($1, $2, $3) 
+		RETURNING id
+	`, item.Name, item.Qty, item.Weight)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func (itemRepo ItemRepository) UpdateItemById(id int, item Item) {
+	log.Println("=== UPDATE ITEM BY ID ===")
+
+	_, err := itemRepo.db.Exec(`
+		UPDATE items
+		SET
+			name = $1,
+			qty = $2,
+			weight = $3
+		WHERE
+			id = $4
+	`, item.Name, item.Qty, item.Weight, item.ID)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
