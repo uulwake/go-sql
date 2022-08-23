@@ -50,5 +50,10 @@ func main() {
 	log.Printf("item: %+v", item)
 
 	newItem := models.Item{Name: "itemD", Qty: 4, Weight: 10.123}
-	ItemRepository.CreateItem(repositories.Item(newItem))
+	ItemRepository.CreateItem(newItem)
+
+	OrderRepository := repositories.NewOrderRepository(db)
+
+	order := models.Order{RecipientName: "user1", RecipientAddress: "address1", Shipper: "shipper1"}
+	OrderRepository.CreateOrder(order, item, 10)
 }

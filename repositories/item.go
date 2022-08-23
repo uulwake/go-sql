@@ -6,8 +6,6 @@ import (
 	"log"
 )
 
-type Item models.Item
-
 type ItemRepository struct {
 	db *sql.DB
 }
@@ -16,10 +14,10 @@ func NewItemRepository(db *sql.DB) ItemRepository {
 	return ItemRepository{db}
 }
 
-func (itemRepo ItemRepository) FetchAllItems() []Item {
+func (itemRepo ItemRepository) FetchAllItems() []models.Item {
 	log.Println("=== FETCHING ALL ITEMS ===")
 
-	items := []Item{}
+	items := []models.Item{}
 
 	rows, err := itemRepo.db.Query("SELECT id, name, qty, weight FROM items")
 	if err != nil {
@@ -28,7 +26,7 @@ func (itemRepo ItemRepository) FetchAllItems() []Item {
 	defer rows.Close()
 
 	for rows.Next() {
-		item := Item{}
+		item := models.Item{}
 
 		err := rows.Scan(&item.ID, &item.Name, &item.Qty, &item.Weight)
 
@@ -48,10 +46,10 @@ func (itemRepo ItemRepository) FetchAllItems() []Item {
 	return items
 }
 
-func (itemRepo ItemRepository) FetchById(itemId int) Item {
+func (itemRepo ItemRepository) FetchById(itemId int) models.Item {
 	log.Println("=== FETCH ITEM BY ID ===")
 
-	item := Item{}
+	item := models.Item{}
 
 	err := itemRepo.db.QueryRow("SELECT id, name, qty, weight FROM items WHERE id = $1", itemId).Scan(&item.ID, &item.Name, &item.Qty, &item.Weight)
 
@@ -64,7 +62,7 @@ func (itemRepo ItemRepository) FetchById(itemId int) Item {
 	return item
 }
 
-func (itemRepo ItemRepository) CreateItem(item Item) {
+func (itemRepo ItemRepository) CreateItem(item models.Item) {
 	log.Println("=== CREATE NEW ITEM ===")
 
 	_, err := itemRepo.db.Exec(`
@@ -79,7 +77,7 @@ func (itemRepo ItemRepository) CreateItem(item Item) {
 	}
 }
 
-func (itemRepo ItemRepository) UpdateItemById(id int, item Item) {
+func (itemRepo ItemRepository) UpdateItemById(id int, item models.Item) {
 	log.Println("=== UPDATE ITEM BY ID ===")
 
 	_, err := itemRepo.db.Exec(`
