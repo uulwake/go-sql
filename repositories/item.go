@@ -14,6 +14,18 @@ func NewItemRepository(db *sql.DB) ItemRepository {
 	return ItemRepository{db}
 }
 
+func (itemRepo ItemRepository) CountItems() int {
+	log.Println("=== FETCHING ALL ITEMS ===")
+
+	var counter int
+	err := itemRepo.db.QueryRow("SELECT count(*) FROM items").Scan(&counter)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return counter
+}
+
 func (itemRepo ItemRepository) FetchAllItems() []models.Item {
 	log.Println("=== FETCHING ALL ITEMS ===")
 

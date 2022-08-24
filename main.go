@@ -56,4 +56,7 @@ func main() {
 
 	order := models.Order{RecipientName: "user1", RecipientAddress: "address1", Shipper: "shipper1"}
 	OrderRepository.CreateOrder(order, item, 10)
+
+	itemCount := ItemRepository.CountItems()
+	fmt.Println(itemCount)
 }
