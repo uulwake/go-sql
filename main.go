@@ -59,4 +59,10 @@ func main() {
 
 	itemCount := ItemRepository.CountAll()
 	fmt.Println(itemCount)
+
+	lastId := items[len(items)-1].ID
+	ItemRepository.DeleteById(lastId)
+
+	itemCount = ItemRepository.CountAll()
+	fmt.Println("Total items after delete:", itemCount)
 }

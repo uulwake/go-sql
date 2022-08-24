@@ -106,3 +106,12 @@ func (itemRepo ItemRepository) UpdateById(id int, item models.Item) {
 		log.Fatal(err)
 	}
 }
+
+func (itemRepo ItemRepository) DeleteById(id int) {
+	log.Println("=== DELETE ITEM BY ID ===")
+
+	_, err := itemRepo.db.Exec("DELETE FROM items WHERE id = $1", id)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
