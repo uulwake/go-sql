@@ -14,7 +14,7 @@ func NewItemRepository(db *sql.DB) ItemRepository {
 	return ItemRepository{db}
 }
 
-func (itemRepo ItemRepository) CountItems() int {
+func (itemRepo ItemRepository) CountAll() int {
 	log.Println("=== FETCHING ALL ITEMS ===")
 
 	var counter int
@@ -26,7 +26,7 @@ func (itemRepo ItemRepository) CountItems() int {
 	return counter
 }
 
-func (itemRepo ItemRepository) FetchAllItems() []models.Item {
+func (itemRepo ItemRepository) FetchAll() []models.Item {
 	log.Println("=== FETCHING ALL ITEMS ===")
 
 	items := []models.Item{}
@@ -74,7 +74,7 @@ func (itemRepo ItemRepository) FetchById(itemId int) models.Item {
 	return item
 }
 
-func (itemRepo ItemRepository) CreateItem(item models.Item) {
+func (itemRepo ItemRepository) Create(item models.Item) {
 	log.Println("=== CREATE NEW ITEM ===")
 
 	_, err := itemRepo.db.Exec(`
@@ -89,7 +89,7 @@ func (itemRepo ItemRepository) CreateItem(item models.Item) {
 	}
 }
 
-func (itemRepo ItemRepository) UpdateItemById(id int, item models.Item) {
+func (itemRepo ItemRepository) UpdateById(id int, item models.Item) {
 	log.Println("=== UPDATE ITEM BY ID ===")
 
 	_, err := itemRepo.db.Exec(`
